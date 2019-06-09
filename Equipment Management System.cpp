@@ -1,9 +1,9 @@
 /* *********************************************************************
-|                  ÃæÏò¹ı³Ì³ÌĞòÉè¼Æ×ÛºÏÓ¦ÓÃ
-|    Ñ¡    Ìâ  Éè±¸¹ÜÀíÏµÍ³ Equipment Management System
-|    ĞÕ    Ãû  »ÆÔ¶Åô        Ñ§    ºÅ  183401050225
-|    °à    ¼¶  Èí¼ş1802
-|    Íê³ÉÊ±¼ä  2019Äê5ÔÂ31ÈÕ
+|                  é¢å‘è¿‡ç¨‹ç¨‹åºè®¾è®¡ç»¼åˆåº”ç”¨
+|    é€‰    é¢˜  è®¾å¤‡ç®¡ç†ç³»ç»Ÿ Equipment Management System
+|    å§“    å  é»„è¿œé¹        å­¦    å·  183401050225
+|    ç­    çº§  è½¯ä»¶1802
+|    å®Œæˆæ—¶é—´  2019å¹´6æœˆ9æ—¥
 \  ******************************************************************** */
 
 #include <stdio.h>
@@ -16,133 +16,122 @@ struct _Date
 };
 typedef struct _Equipment
 {
-	int id;    // Éè±¸±àºÅ(8Î»Êı)
-	char name[50];   // ÒÇÆ÷Ãû³Æ
-	char type[50];   // ĞÍºÅ¹æ¸ñ
-	double price;    // µ¥¼Û
-	struct _Date boughtDate;    // ¹ºÈëÈÕÆÚ
-	char person[50];    // ÁìÓÃÈË
-	char status[100];    // Ê¹ÓÃ×´¿ö
-	char postscript[110];    // ±¸×¢(50×ÖÄÚ)
-	struct _Equipment *pre,*next;   // Ç°Ç÷Óëºó¼ÌÖ¸Õë
-	_Equipment()   // ¹¹Ôìº¯Êı³õÊ¼»¯Á½¸öÖ¸ÕëÎªNULL
+	int id;    // è®¾å¤‡ç¼–å·(8ä½æ•°)
+	char name[50];   // ä»ªå™¨åç§°
+	char type[50];   // å‹å·è§„æ ¼
+	double price;    // å•ä»·
+	struct _Date boughtDate;    // è´­å…¥æ—¥æœŸ
+	char person[50];    // é¢†ç”¨äºº
+	char status[100];    // ä½¿ç”¨çŠ¶å†µ
+	char postscript[110];    // å¤‡æ³¨(50å­—å†…)
+	struct _Equipment *pre,*next;   // å‰è¶‹ä¸åç»§æŒ‡é’ˆ
+	_Equipment()   // æ„é€ å‡½æ•°åˆå§‹åŒ–ä¸¤ä¸ªæŒ‡é’ˆä¸ºNULL
 	{
 		pre=NULL;
 		next=NULL;
 	}
 }equip;
 
-// º¯ÊıÉùÃ÷ÓëÈ«¾Ö±äÁ¿¶¨Òå
-void ChangeColor();
+// å‡½æ•°å£°æ˜ä¸å…¨å±€å˜é‡å®šä¹‰
 inline void PrintDirection();
 void InputFromFile();
+void InputFromStdin();
+void AddOnePiece();
+void Display();
+void PutsData();
+void CheckOnePiece();
+void KeywordSearch();
 void SaveData();
-equip *head=new equip;   // ´Ë³ÌĞòÀïµÄÁ´±íÊÇ"´øÍ·½áµã"µÄË«ÏòÁ´±í
-equip *rear=head;     // Á´Î²Ö¸Õë
-bool isSaved=false;   // true:ÒÑ±£´æÊı¾İ   false:ÉĞÎ´±£´æ
+void Modify();
+void DeleteOnePiece();
+void ChangeColor();
+bool Quit();
+equip *head=new equip;   // æ­¤ç¨‹åºé‡Œçš„é“¾è¡¨æ˜¯"å¸¦å¤´ç»“ç‚¹"çš„åŒå‘é“¾è¡¨
+equip *rear=head;     // é“¾å°¾æŒ‡é’ˆ
+bool isSaved=false;   // true:å·²ä¿å­˜æ•°æ®   false:å°šæœªä¿å­˜
 
 int main()
 {
-	char choice;      // choice ½ÓÊÕÓÉÓÃ»§ÊäÈëµÄÖ¸Áî´úÂë
+	char choice;      // choice æ¥æ”¶ç”±ç”¨æˆ·è¾“å…¥çš„æŒ‡ä»¤ä»£ç 
 	while(true)
 	{
-		system("cls");     // ÇåÆÁ
-		system("title Éè±¸¹ÜÀíÏµÍ³");     // ¸ü¸Ä´°¿Ú±êÌâ
+		system("cls");     // æ¸…å±
+		system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ");     // æ›´æ”¹çª—å£æ ‡é¢˜
 		PrintDirection();
 
 		choice = getchar();
 		fflush(stdin);
 		switch(choice)
 		{
-		case '1':system("cls");InputFromFile();break;   // ´ÓÎÄ¼şÂ¼ÈëĞÅÏ¢
-		case '2':system("cls");break;   // ÅúÁ¿Â¼ÈëĞÂĞÅÏ¢
-		case '3':system("cls");AddOnePiece();break;   // Ôö¼ÓÒ»ÌõĞÂĞÅÏ¢
-		case '4':system("cls");break;   // ²é¿´ĞÅÏ¢
-		case '5':system("cls");break;   // ¹Ø¼ü×Ö²éÕÒ
-		case '6':system("cls");SaveData();break;   // ±£´æÒÑÓĞĞÅÏ¢
-		case '7':system("cls");break;   // ĞŞ¸ÄĞÅÏ¢
-		case '8':system("cls");break;   // É¾³ıĞÅÏ¢
-		case '9':system("cls");ChangeColor();break;   // ĞŞ¸Ä´°¿ÚÓë×ÖÌåÑÕÉ«
-		case '0':system("cls");break;   // ÍË³öÏµÍ³
+		case '1':system("cls"); InputFromFile();  break;   // ä»æ–‡ä»¶å½•å…¥ä¿¡æ¯
+		case '2':system("cls"); InputFromStdin(); break;   // æ‰¹é‡å½•å…¥æ–°ä¿¡æ¯
+		case '3':system("cls"); AddOnePiece();    break;   // å¢åŠ ä¸€æ¡æ–°ä¿¡æ¯
+		case '4':system("cls"); Display();        break;   // æŸ¥çœ‹ä¿¡æ¯
+		case '5':system("cls"); KeywordSearch();  break;   // å…³é”®å­—æŸ¥æ‰¾
+		case '6':system("cls"); SaveData();       break;   // ä¿å­˜å·²æœ‰ä¿¡æ¯
+		case '7':system("cls"); Modify();         break;   // ä¿®æ”¹ä¿¡æ¯
+		case '8':system("cls"); DeleteOnePiece(); break;   // åˆ é™¤ä¿¡æ¯
+		case '9':system("cls"); ChangeColor();    break;   // ä¿®æ”¹çª—å£ä¸å­—ä½“é¢œè‰²
+		case '0':system("cls");
+			if(Quit()==true)
+				return 0;   // é€€å‡ºç³»ç»Ÿ
+			else
+				break;
 
-		default:puts("ÊäÈë´íÎó£¬ÇëÖØĞÂÊäÈë¡£");system("pause");break;
+		default:puts("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ã€‚"); system("pause"); break;
 		}
 	}
-
 
 	return 0;
 }
 
 /* *********************************************************************
-|    º¯ÊıÃû£ºChangeColor
-|    º¯Êı¹¦ÄÜ£º¸ü¸Ä´°¿Ú±³¾°ÑÕÉ«Óë×ÖÌåÑÕÉ«
+|    å‡½æ•°åï¼šPrintDirection
+|    å‡½æ•°åŠŸèƒ½ï¼šè¾“å‡ºæç¤ºä¿¡æ¯
 \  ******************************************************************** */
-void ChangeColor()
+inline void PrintDirection()
 {
-	system("title Éè±¸¹ÜÀíÏµÍ³  -  ÑÕÉ«ĞŞ¸Ä");
-	char ColorChoice[3]="";
-	puts("ÇëÊäÈëÄúÒª¸ü¸ÄµÄ±³¾°Óë×ÖÌåÑÕÉ«£¬×Ö·û²»Çø·Ö´óĞ¡Ğ´£¬ÒÔ»Ø³µ½áÊø£º");
-	puts("    0 = ºÚÉ«       8 = »ÒÉ«");
-	puts("    1 = À¶É«       9 = µ­À¶É«");
-	puts("    2 = ÂÌÉ«       A = µ­ÂÌÉ«");
-	puts("    3 = Ç³ÂÌÉ«     B = µ­Ç³ÂÌÉ«");
-	puts("    4 = ºìÉ«       C = µ­ºìÉ«");
-	puts("    5 = ×ÏÉ«       D = µ­×ÏÉ«");
-	puts("    6 = »ÆÉ«       E = µ­»ÆÉ«");
-	puts("    7 = °×É«       F = ÁÁ°×É«");
-	puts("Ê¾Àı: ÊäÈë\"fc\"½«ÉèÖÃ±³¾°ÎªÁÁ°×É«£¬×ÖÌåÎªµ­ºìÉ«¡£");
-	puts("ÈçĞè»Ö¸´Ä¬ÈÏÑÕÉ«£¬ÇëÊäÈë\"**\"£»·µ»ØÖ÷²Ëµ¥£¬ÇëÊäÈë\"##\"¡£");
-	printf(">>> ");
-	while(true)
-	{
-		ColorChoice[0]=getchar();
-		ColorChoice[1]=getchar();
-		fflush(stdin);
-		if(strcmp(ColorChoice,"**")==0)     // »Ö¸´Ä¬ÈÏÑÕÉ«
-		{
-			system("color 07");
-			break;
-		}
-		else if(strcmp(ColorChoice,"##")==0)    // ·µ»ØÖ÷²Ëµ¥
-			break;
-		else if(!isxdigit(ColorChoice[0]) || !isxdigit(ColorChoice[1]))  // ÊäÈë´íÎó
-			printf("ÊäÈë´íÎó£¬ÇëÖØĞÂÊäÈë£º");
-		else if(ColorChoice[0]==ColorChoice[1])  // ±³¾°Óë×ÖÌåÍ¬É«
-			printf("²»ÄÜ½«±³¾°Óë×ÖÌåÉèÖÃÎªÍ¬Ò»ÑÕÉ«¡£ÇëÖØĞÂÊäÈë£º");
-		else
-		{
-			char ColorMode[10]="color ";
-			strcat(ColorMode,ColorChoice);
-			system(ColorMode);
-			break;
-		}
-	}
-	return;
+	printf("     * * * * *  è®¾ å¤‡ ç®¡ ç† ç³» ç»Ÿ  * * * * *\n\n");
+	puts("     * * * * * *   è¾“å…¥ / æ·»åŠ    * * * * * *");
+	puts("             1 - ä»æ–‡ä»¶å½•å…¥ä¿¡æ¯");
+	puts("             2 - æ‰¹é‡å½•å…¥æ–°ä¿¡æ¯");
+	puts("             3 - å¢åŠ ä¸€æ¡æ–°ä¿¡æ¯");
+	puts("     * * * * * *   æŸ¥è¯¢ / ä¿å­˜   * * * * * *");
+	puts("             4 - æŸ¥çœ‹ä¿¡æ¯");
+	puts("             5 - å…³é”®å­—æŸ¥æ‰¾");
+	puts("             6 - ä¿å­˜å·²æœ‰ä¿¡æ¯");
+	puts("     * * * * * *   ä¿®æ”¹ / åˆ é™¤   * * * * * *");
+	puts("             7 - ä¿®æ”¹ä¿¡æ¯");
+	puts("             8 - åˆ é™¤ä¿¡æ¯");
+	puts("     * * * * * *     ç³»ç»Ÿè®¾ç½®    * * * * * *");
+	puts("             9 - ä¿®æ”¹çª—å£ä¸å­—ä½“é¢œè‰²");
+	puts("             0 - é€€å‡ºç³»ç»Ÿ\n");
+	printf("è¯·é€‰æ‹©ï¼š");
 }
 
 /* *********************************************************************
-|    º¯ÊıÃû£ºInputFromFile
-|    º¯Êı¹¦ÄÜ£º´ÓÎÄ¼ş¶ÁÈëÒÑÓĞĞÅÏ¢
+|    å‡½æ•°åï¼šInputFromFile
+|    å‡½æ•°åŠŸèƒ½ï¼šä»æ–‡ä»¶è¯»å…¥å·²æœ‰ä¿¡æ¯
 \  ******************************************************************** */
 void InputFromFile()
 {
-	system("title Éè±¸¹ÜÀíÏµÍ³ - ´ÓÎÄ¼şÂ¼ÈëĞÅÏ¢");
-	puts("ÇëÊäÈëÎÄ¼şÃû»òÎÄ¼şµÄµØÖ·£¬ÒÔ»Ø³µ½áÊø¡£×¢Òâ£ºµØÖ·ÖĞµÄ'\\'Ó¦Ğ´×÷\"\\\\\"¡£");
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - ä»æ–‡ä»¶å½•å…¥ä¿¡æ¯");
+	puts("è¯·è¾“å…¥æ–‡ä»¶åæˆ–æ–‡ä»¶çš„åœ°å€ï¼Œä»¥å›è½¦ç»“æŸã€‚æ³¨æ„ï¼šåœ°å€ä¸­çš„'\\'åº”å†™ä½œ\"\\\\\"ã€‚");
 	printf(">>> ");
-	char fileName[200];       // ÎÄ¼şÃû»òµØÖ·
+	char fileName[200];       // æ–‡ä»¶åæˆ–åœ°å€
 	scanf("%[^\n]",fileName);
 	fflush(stdin);
 	FILE *fp=fopen(fileName,"r");
-	if(fp==NULL)   // Î´´ò¿ª³É¹¦
+	if(fp==NULL)   // æœªæ‰“å¼€æˆåŠŸ
 	{
-		puts("ÎŞ·¨´ò¿ªÖ¸¶¨µÄÎÄ¼ş£¬ÇëÖØÊÔ¡£");
+		puts("æ— æ³•æ‰“å¼€æŒ‡å®šçš„æ–‡ä»¶ï¼Œè¯·é‡è¯•ã€‚");
 		system("pause");
 		return;
 	}
-	equip *p=rear;    // ´ÓÁ´±íÎ²¿ªÊ¼Ìí¼ÓĞÂÄÚÈİ
-	char temp[500];   // ¼Ù¶¨Ò»ÌõÊı¾İµÄ×î´ó³¤¶ÈÎª500¸ö×Ö·û
+	equip *p=rear;    // ä»é“¾è¡¨å°¾å¼€å§‹æ·»åŠ æ–°å†…å®¹
+	char temp[500];   // å‡å®šä¸€æ¡æ•°æ®çš„æœ€å¤§é•¿åº¦ä¸º500ä¸ªå­—ç¬¦
 	equip *s;
-	int cnt=0;   // ¼ÇÂ¼¶ÁÈëÊı¾İÌõÊı
+	int cnt=0;   // è®°å½•è¯»å…¥æ•°æ®æ¡æ•°
 	while(fgets(temp,500,fp)!=NULL)
 	{
 		s=new equip;
@@ -155,45 +144,257 @@ void InputFromFile()
 		cnt++;
 	}
 	if(cnt)
-		printf("³É¹¦¶ÁÈë %d ÌõÊı¾İ¡£",cnt);
+	{
+		printf("æˆåŠŸè¯»å…¥ %d æ¡æ•°æ®ã€‚",cnt);
+		isSaved=false;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆæœªä¿å­˜ï¼‰
+		rear=p;   // æ›´æ–°é“¾å°¾æŒ‡é’ˆ
+	}
 	else
-		printf("Î´ÄÜ³É¹¦¶ÁÈ¡Êı¾İ£¬Çë¼ì²éÎÄ¼ş %s ÊÇ·ñÎª¿Õ¡£\n",fileName);
-	rear=p;   // ¸üĞÂÁ´Î²Ö¸Õë
+		printf("æœªèƒ½æˆåŠŸè¯»å–æ•°æ®ï¼Œè¯·æ£€æŸ¥æ–‡ä»¶ %s æ˜¯å¦ä¸ºç©ºã€‚\n",fileName);
 	fclose(fp);
-	isSaved=false;   // ¸üĞÂÊı¾İ±£´æ×´Ì¬£¨Î´±£´æ£©
 	system("pause");
 	return;
 }
 
 /* *********************************************************************
-|    º¯ÊıÃû£ºSaveData
-|    º¯Êı¹¦ÄÜ£º°ÑÒÑÓĞ¼ÇÂ¼Êä³öµ½ÎÄ¼şÖĞ
+|    å‡½æ•°åï¼šInputFromStdin
+|    å‡½æ•°åŠŸèƒ½ï¼šä»å±å¹•æ‰¹é‡å½•å…¥ä¿¡æ¯
 \  ******************************************************************** */
-void SaveData()
+void InputFromStdin()
 {
-	system("title Éè±¸¹ÜÀíÏµÍ³ - ±£´æÒÑÓĞĞÅÏ¢");
-	if(head->next==NULL)   // ³ıÍ·½áµãÍâ£¬Á´±íÎª¿Õ
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - æ‰¹é‡å½•å…¥æ–°ä¿¡æ¯");
+	puts("è¯·æŒ‰ä»¥ä¸‹æ ¼å¼å½•å…¥ä¿¡æ¯ï¼ŒæŒ‰Crtl+Zå¹¶æŒ‰å›è½¦ç»“æŸè¾“å…¥ã€‚è´­å…¥æ—¥æœŸæ ¼å¼ä¸ºyyyy-mm-dd");
+	puts("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨");
+	equip *p=rear;    // ä»é“¾è¡¨å°¾å¼€å§‹æ·»åŠ æ–°å†…å®¹
+	char temp[500];   // å‡å®šä¸€æ¡æ•°æ®çš„æœ€å¤§é•¿åº¦ä¸º500ä¸ªå­—ç¬¦
+	equip *s;
+	int cnt=0;   // è®°å½•è¯»å…¥æ•°æ®æ¡æ•°
+	while(scanf("%[^\n]",temp)!=EOF)
 	{
-		puts("µ±Ç°ÏµÍ³ÄÚÔİÎŞ¼ÇÂ¼£¬ÇëÊäÈëĞÅÏ¢ºóÔÙ³¢ÊÔ±£´æ¡£");
+		getchar();   // è¯»æ‰å¤šä½™å›è½¦
+		s=new equip;
+		p->next=s;
+		s->pre=p;
+		sscanf(temp,"%d %s %s %lf %d-%d-%d %s %s %s",&s->id,s->name,s->type,
+			&s->price,&s->boughtDate.year,&s->boughtDate.month,&s->boughtDate.day,
+			s->person,s->status,s->postscript);
+		p=s;
+		cnt++;
+	}
+	if(cnt)
+	{
+		printf("æˆåŠŸå½•å…¥ %d æ¡æ•°æ®ã€‚",cnt);
+		isSaved=false;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆæœªä¿å­˜ï¼‰
+		rear=p;   // æ›´æ–°é“¾å°¾æŒ‡é’ˆ
+	}
+	else
+		printf("æœªå½•å…¥ä»»ä½•æ•°æ®ã€‚");
+	system("pause");
+	return;
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šAddOnePiece
+|    å‡½æ•°åŠŸèƒ½ï¼šå¢åŠ ä¸€æ¡æ–°ä¿¡æ¯
+\  ******************************************************************** */
+void AddOnePiece()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - å¢åŠ ä¸€æ¡æ–°ä¿¡æ¯");
+	equip *p=rear,*s;
+	s=new equip;
+	p->next=s;
+	s->pre=p;
+	puts("è¯·è¾“å…¥ä»¥ä¸‹ä¿¡æ¯ï¼š");
+	printf("è®¾å¤‡ç¼–å·: ");
+	scanf("%d",&s->id);fflush(stdin);
+	printf("ä»ªå™¨åç§°: ");
+	scanf("%s",s->name);fflush(stdin);
+	printf("å‹å·è§„æ ¼: ");
+	scanf("%s",s->type);fflush(stdin);
+	printf("å•ä»·: ");
+	scanf("%lf",&s->price);fflush(stdin);
+	printf("è´­å…¥æ—¥æœŸï¼Œæ ¼å¼ä¸ºyyyy-mm-dd: ");
+	scanf("%d-%d-%d",&s->boughtDate.year,&s->boughtDate.month,&s->boughtDate.day);fflush(stdin);
+	printf("é¢†ç”¨äºº: ");
+	scanf("%s",s->person);fflush(stdin);
+	printf("ä½¿ç”¨çŠ¶å†µ: ");
+	scanf("%s",s->status);fflush(stdin);
+	printf("å¤‡æ³¨: ");
+	scanf("%s",s->postscript);fflush(stdin);
+
+	printf("\næˆåŠŸå¢åŠ  1 æ¡ä¿¡æ¯ã€‚");
+	rear=s;   // æ›´æ–°é“¾å°¾æŒ‡é’ˆ
+	isSaved=false;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆæœªä¿å­˜ï¼‰
+	system("pause");
+	return;
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šDisplay
+|    å‡½æ•°åŠŸèƒ½ï¼šæŸ¥çœ‹ä¿¡æ¯çš„é€‰æ‹©èœå•
+\  ******************************************************************** */
+void Display()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - æŸ¥çœ‹ä¿¡æ¯");
+	if(head->next==NULL)   // é™¤å¤´ç»“ç‚¹å¤–ï¼Œé“¾è¡¨ä¸ºç©º
+	{
+		puts("\nå½“å‰ç³»ç»Ÿå†…æš‚æ— è®°å½•ã€‚\n");
 		system("pause");
 		return;
 	}
 
-	puts("ÇëÊäÈëÎÄ¼şÃû»òÎÄ¼şµÄµØÖ·£¬ÒÔ»Ø³µ½áÊø¡£×¢Òâ£ºµØÖ·ÖĞµÄ'\\'Ó¦Ğ´×÷\"\\\\\"¡£");
-	puts("¡¾ÌØ±ğÌáÊ¾¡¿Èç¹û´ò¿ª´ÅÅÌÖĞÒÑÓĞµÄÎÄ¼ş£¬¸ÃÎÄ¼ş½«±»Çå¿Õ¡£");
+	char choice;
+	puts("\t1 - æŸ¥çœ‹å…¨éƒ¨ä¿¡æ¯");
+	puts("\t2 - æŸ¥çœ‹æŒ‡å®šç¼–å·çš„ä¿¡æ¯");
+	puts("\t0 - è¿”å›ä¸»èœå•");
+	printf("è¯·é€‰æ‹©ï¼š");
+	while(true)
+	{
+		choice = getchar();
+		fflush(stdin);
+		switch(choice)
+		{
+		case '1':PutsData();return;
+		case '2':CheckOnePiece();return;
+		case '0':return;
+
+		default:printf("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼š");
+		}
+	}
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šPutsData
+|    å‡½æ•°åŠŸèƒ½ï¼šæŠŠå·²æœ‰è®°å½•è¾“å‡ºåˆ°å±å¹•
+\  ******************************************************************** */
+void PutsData()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - æŸ¥çœ‹å…¨éƒ¨ä¿¡æ¯");
+	equip *p=head->next;
+	int cnt=0;   // cntè®°å½•æ•°æ®ä¸ªæ•°
+	printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+	while(p!=NULL)
+	{
+		printf("%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
+			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+			p->person,p->status,p->postscript);
+		p=p->next;
+		cnt++;
+	}
+	printf("\nå…±è¾“å‡ºäº† %d æ¡ä¿¡æ¯ã€‚",cnt);
+
+	system("pause");
+	return;
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šCheckOnePiece
+|    å‡½æ•°åŠŸèƒ½ï¼šæŸ¥çœ‹ã€è¾“å‡ºä¸€æ¡ä¿¡æ¯
+\  ******************************************************************** */
+void CheckOnePiece()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - æŸ¥çœ‹æŒ‡å®šç¼–å·çš„ä¿¡æ¯");
+	int foundId;
+	printf("è¯·è¾“å…¥å¾…æŸ¥è¯¢çš„ç¼–å·ï¼š");
+	scanf("%d",&foundId);
+	fflush(stdin);
+	equip *p=head->next;
+	while(p!=NULL && p->id!=foundId)
+		p=p->next;
+	if(p==NULL)
+	{
+		printf("æœªæŸ¥è¯¢åˆ°ç¼–å· %d å¯¹åº”çš„ä¿¡æ¯ï¼Œæ˜¯å¦å½•å…¥ï¼Ÿ\n",foundId);
+		puts("\t1 - å½•å…¥\t2 - è¿”å›");
+		printf(">>> ");
+		char choice=getchar();
+		fflush(stdin);
+		switch(choice)
+		{
+		case '1':AddOnePiece();break;
+		case '2':break;
+		default:printf("è¾“å…¥é”™è¯¯ï¼Œå³å°†è¿”å›ä¸»èœå•ã€‚");system("pause");break;
+		}
+	}
+	else
+	{
+		printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+		printf("%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
+			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+			p->person,p->status,p->postscript);
+		system("pause");
+	}
+
+	return;
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šKeywordSearch
+|    å‡½æ•°åŠŸèƒ½ï¼šæŒ‰ç»™å‡ºå…³é”®å­—æŸ¥æ‰¾ä¿¡æ¯
+\  ******************************************************************** */
+void KeywordSearch()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - å…³é”®å­—æŸ¥æ‰¾");
+	puts("è¯·è¾“å…¥æƒ³æŸ¥æ‰¾çš„å†…å®¹ï¼Œåªèƒ½è¾“å…¥ä¸€ä¸ªå…³é”®å­—ï¼Œä»¥å›è½¦ç»“æŸã€‚");
 	printf(">>> ");
-	char fileName[200];       // ÎÄ¼şÃû»òµØÖ·
+	char keyword[100],temp[500];
+	scanf("%s",keyword);
+	fflush(stdin);
+	equip *p=head->next;
+	int cnt=0;   // è®°å½•æŸ¥æ‰¾åˆ°çš„æ•°æ®æ¡æ•°
+	while(p!=NULL)
+	{
+		sprintf(temp,"%d %s %s %lf %d-%d-%d %s %s %s",p->id,p->name,p->type,
+			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+			p->person,p->status,p->postscript);
+		if(strstr(temp,keyword))
+		{
+			if(cnt==0)   // ç¬¬ä¸€æ¬¡æŸ¥æ‰¾åˆ°ï¼Œè¾“å‡ºè¡¨å¤´
+				printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+			printf("%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
+				p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+				p->person,p->status,p->postscript);
+			cnt++;
+		}
+		p=p->next;
+	}
+	if(cnt==0)   // æœªæŸ¥æ‰¾åˆ°
+		printf("\næœªæŸ¥æ‰¾åˆ°å« %s çš„ä¿¡æ¯ã€‚",keyword);
+	else
+		printf("\nå…±æŸ¥æ‰¾åˆ° %d æ¡ä¿¡æ¯ã€‚",cnt);
+
+	system("pause");
+	return;
+}
+
+/* *********************************************************************
+|    å‡½æ•°åï¼šSaveData
+|    å‡½æ•°åŠŸèƒ½ï¼šæŠŠå·²æœ‰è®°å½•è¾“å‡ºåˆ°æ–‡ä»¶ä¸­
+\  ******************************************************************** */
+void SaveData()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - ä¿å­˜å·²æœ‰ä¿¡æ¯");
+	if(head->next==NULL)   // é™¤å¤´ç»“ç‚¹å¤–ï¼Œé“¾è¡¨ä¸ºç©º
+	{
+		puts("\nå½“å‰ç³»ç»Ÿå†…æš‚æ— è®°å½•ï¼Œè¯·è¾“å…¥ä¿¡æ¯åå†å°è¯•ä¿å­˜ã€‚\n");
+		system("pause");
+		return;  // æ— è®°å½•æ—¶å¹¶ä¸ä¿å­˜ä»»ä½•æ•°æ®ï¼Œè¿”å›false
+	}
+
+	puts("è¯·è¾“å…¥æ–‡ä»¶åæˆ–æ–‡ä»¶çš„åœ°å€ï¼Œä»¥å›è½¦ç»“æŸã€‚æ³¨æ„ï¼šåœ°å€ä¸­çš„'\\'åº”å†™ä½œ\"\\\\\"ã€‚");
+	puts("ã€ç‰¹åˆ«æç¤ºã€‘å¦‚æœæ‰“å¼€ç£ç›˜ä¸­å·²æœ‰çš„æ–‡ä»¶ï¼Œè¯¥æ–‡ä»¶å°†è¢«æ¸…ç©ºã€‚");
+	printf(">>> ");
+	char fileName[200];       // æ–‡ä»¶åæˆ–åœ°å€
 	scanf("%[^\n]",fileName);
 	fflush(stdin);
 	FILE *fp=fopen(fileName,"w");
-	if(fp==NULL)   // Î´´ò¿ª³É¹¦
+	if(fp==NULL)   // æœªæ‰“å¼€æˆåŠŸ
 	{
-		puts("ÏµÍ³´íÎó£ºÎŞ·¨´ò¿ªÖ¸¶¨µÄÎÄ¼ş£¬ÇëÖØÊÔ¡£");
+		puts("ç³»ç»Ÿé”™è¯¯ï¼šæ— æ³•æ‰“å¼€æŒ‡å®šçš„æ–‡ä»¶ï¼Œè¯·é‡è¯•ã€‚");
 		system("pause");
 		return;
 	}
 	equip *p=head->next;
-	int cnt=0;   // cnt¼ÇÂ¼Êı¾İ¸öÊı
+	int cnt=0;   // cntè®°å½•æ•°æ®ä¸ªæ•°
 	while(p!=NULL)
 	{
 		fprintf(fp,"%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
@@ -202,82 +403,207 @@ void SaveData()
 		p=p->next;
 		cnt++;
 	}
-	printf("³É¹¦±£´æ %d ÌõÊı¾İ¡£",cnt);
+	printf("æˆåŠŸä¿å­˜ %d æ¡æ•°æ®åˆ° %s ã€‚",cnt,fileName);
 
-	isSaved=true;   // ¸üĞÂÊı¾İ±£´æ×´Ì¬£¨ÒÑ±£´æ£©
+	isSaved=true;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆå·²ä¿å­˜ï¼‰
 	fclose(fp);
 	system("pause");
 	return;
 }
 
 /* *********************************************************************
-|    º¯ÊıÃû£ºAddOnePiece
-|    º¯Êı¹¦ÄÜ£ºÔö¼ÓÒ»ÌõĞÂĞÅÏ¢
+|    å‡½æ•°åï¼šModify
+|    å‡½æ•°åŠŸèƒ½ï¼šä¿®æ”¹æŒ‡å®šç¼–å·çš„ä¿¡æ¯
 \  ******************************************************************** */
-void AddOnePiece()
+void Modify()
 {
-	system("title - Ôö¼ÓÒ»ÌõĞÂĞÅÏ¢");
-	equip *p=rear,*s;
-	s=new equip;
-	p->next=s;
-	s->pre=p;
-	puts("ÇëÊäÈëÒÔÏÂĞÅÏ¢£º");
-	printf("Éè±¸±àºÅ: ");
-	scanf("%d",&s->id);fflush(stdin);
-	printf("ÒÇÆ÷Ãû³Æ: ");
-	scanf("%s",s->name);fflush(stdin);
-	printf("ĞÍºÅ¹æ¸ñ: ");
-	scanf("%s",s->type);fflush(stdin);
-	printf("µ¥¼Û: ");
-	scanf("%lf",&s->price);fflush(stdin);
-	printf("¹ºÈëÈÕÆÚ£¬¸ñÊ½Îªyyyy-mm-dd: ");
-	scanf("%d-%d-%d",&s->boughtDate.year,&s->boughtDate.month,&s->boughtDate.day);fflush(stdin);
-	printf("ÁìÓÃÈË: ");
-	scanf("%s",s->person);fflush(stdin);
-	printf("Ê¹ÓÃ×´¿ö: ");
-	scanf("%s",s->status);fflush(stdin);
-	printf("±¸×¢: ");
-	scanf("%s",s->postscript);fflush(stdin);
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - ä¿®æ”¹ä¿¡æ¯");
+	if(head->next==NULL)   // é™¤å¤´ç»“ç‚¹å¤–ï¼Œé“¾è¡¨ä¸ºç©º
+	{
+		puts("\nå½“å‰ç³»ç»Ÿå†…æš‚æ— è®°å½•ï¼Œæ— æ³•ä¿®æ”¹ã€‚\n");
+		system("pause");
+		return;
+	}
+	int modId;
+	printf("è¯·è¾“å…¥æƒ³è¦ä¿®æ”¹çš„ä¿¡æ¯çš„ç¼–å·ï¼š");
+	scanf("%d",&modId);
+	fflush(stdin);
+	equip *p=head->next;
+	while(p!=NULL && p->id!=modId)
+		p=p->next;
+	if(p==NULL)     // æ²¡æœ‰è¿™ä¸€æ¡ï¼Œæ— æ³•ä¿®æ”¹
+	{
+		printf("æœªæ‰¾åˆ°ç¼–å· %d å¯¹åº”çš„ä¿¡æ¯ï¼Œæ— æ³•ä¿®æ”¹ã€‚\n",modId);
+		system("pause");
+	}
+	else   // æ‰¾åˆ°äº†ï¼Œå‡†å¤‡ä¿®æ”¹
+	{
+		puts("\nå½“å‰å†…å®¹ï¼š");
+		printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+		printf("%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
+			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+			p->person,p->status,p->postscript);
 
+		equip t;
+		puts("\nè¯·è¾“å…¥ä¿®æ”¹åçš„å†…å®¹ï¼š");
+		printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+		scanf("%d %s %s %lf %d-%d-%d %s %s %s",&t.id,t.name,t.type,
+			&t.price,&t.boughtDate.year,&t.boughtDate.month,&t.boughtDate.day,
+			t.person,t.status,t.postscript);
+		fflush(stdin);
 
-
-
-	printf("³É¹¦Ôö¼Ó 1 ÌõĞÅÏ¢¡£");
-	rear=s;   // ¸üĞÂÁ´Î²Ö¸Õë
-	isSaved=false;   // ¸üĞÂÊı¾İ±£´æ×´Ì¬£¨Î´±£´æ£©
-	system("pause");
+		printf("\n\t1 - ç¡®è®¤ä¿®æ”¹\t2 - è¿”å›\n");
+		printf(">>> ");
+		char choice=getchar();
+		fflush(stdin);
+		switch(choice)
+		{
+		case '1':*p=t;
+			printf("ä¿®æ”¹æˆåŠŸã€‚");
+			isSaved=false;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆæœªä¿å­˜ï¼‰
+			system("pause");break;
+		case '2':break;
+		default:printf("è¾“å…¥é”™è¯¯ï¼Œä¿¡æ¯æœªä¿®æ”¹ã€‚å³å°†è¿”å›ä¸»èœå•ã€‚\n");
+			system("pause");break;
+		}
+	}
 	return;
 }
 
 /* *********************************************************************
-|    º¯ÊıÃû£ºPrintDirection
-|    º¯Êı¹¦ÄÜ£ºÊä³öÌáÊ¾ĞÅÏ¢
+|    å‡½æ•°åï¼šDeleteOnePiece
+|    å‡½æ•°åŠŸèƒ½ï¼šåˆ é™¤æŒ‡å®šç¼–å·çš„ä¿¡æ¯
 \  ******************************************************************** */
-inline void PrintDirection()
+void DeleteOnePiece()
 {
-	printf("     * * * * *  Éè ±¸ ¹Ü Àí Ïµ Í³  * * * * *\n\n");
-	puts("     * * * * * *   ÊäÈë / Ìí¼Ó   * * * * * *");
-	puts("             1 - ´ÓÎÄ¼şÂ¼ÈëĞÅÏ¢");
-	puts("             2 - ÅúÁ¿Â¼ÈëĞÂĞÅÏ¢");
-	puts("             3 - Ôö¼ÓÒ»ÌõĞÂĞÅÏ¢");
-	puts("     * * * * * *   ²éÑ¯ / ±£´æ   * * * * * *");
-	puts("             4 - ²é¿´ĞÅÏ¢");
-	puts("             5 - ¹Ø¼ü×Ö²éÕÒ");
-	puts("             6 - ±£´æÒÑÓĞĞÅÏ¢");
-	puts("     * * * * * *   ĞŞ¸Ä / É¾³ı   * * * * * *");
-	puts("             7 - ĞŞ¸ÄĞÅÏ¢");
-	puts("             8 - É¾³ıĞÅÏ¢");
-	puts("     * * * * * *     ÏµÍ³ÉèÖÃ    * * * * * *");
-	puts("             9 - ĞŞ¸Ä´°¿ÚÓë×ÖÌåÑÕÉ«");
-	puts("             0 - ÍË³öÏµÍ³");
-	printf("ÇëÑ¡Ôñ£º");
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ - åˆ é™¤ä¿¡æ¯");
+	if(head->next==NULL)   // é™¤å¤´ç»“ç‚¹å¤–ï¼Œé“¾è¡¨ä¸ºç©º
+	{
+		puts("\nå½“å‰ç³»ç»Ÿå†…æš‚æ— è®°å½•ï¼Œæ— æ³•åˆ é™¤ã€‚\n");
+		system("pause");
+		return;
+	}
+	int delId;
+	printf("è¯·è¾“å…¥æƒ³è¦åˆ é™¤çš„ä¿¡æ¯çš„ç¼–å·ï¼š");
+	scanf("%d",&delId);
+	fflush(stdin);
+	equip *p=head->next;
+	while(p!=NULL && p->id!=delId)
+		p=p->next;
+	if(p==NULL)     // æ²¡æœ‰è¿™ä¸€æ¡ï¼Œæ— æ³•åˆ é™¤
+	{
+		printf("æœªæ‰¾åˆ°ç¼–å· %d å¯¹åº”çš„ä¿¡æ¯ï¼Œæ— æ³•åˆ é™¤ã€‚\n",delId);
+		system("pause");
+	}
+	else   // æ‰¾åˆ°äº†ï¼Œå‡†å¤‡åˆ é™¤
+	{
+		printf("è®¾å¤‡ç¼–å·	ä»ªå™¨åç§°	å‹å·è§„æ ¼	å•ä»·	è´­å…¥æ—¥æœŸ	é¢†ç”¨äºº	ä½¿ç”¨çŠ¶å†µ	å¤‡æ³¨\n");
+		printf("%d	%s	%s	%.2lf	%d-%d-%d	%s	%s	%s\n",p->id,p->name,p->type,
+			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
+			p->person,p->status,p->postscript);
+		printf("\n\t1 - ç¡®è®¤åˆ é™¤\t2 - è¿”å›\n");
+		printf(">>> ");
+		char choice=getchar();
+		fflush(stdin);
+		switch(choice)
+		{
+		case '1':p->pre->next=p->next;
+			if(p->next)      // pä¸æ˜¯æœ€åä¸€ä¸ªç»“ç‚¹
+				p->next->pre=p->pre;
+			delete p;
+			printf("ç¼–å· %d å¯¹åº”ä¿¡æ¯å·²åˆ é™¤ã€‚",delId);
+			isSaved=false;   // æ›´æ–°æ•°æ®ä¿å­˜çŠ¶æ€ï¼ˆæœªä¿å­˜ï¼‰
+			system("pause");break;
+		case '2':break;
+		default:printf("è¾“å…¥é”™è¯¯ï¼Œä¿¡æ¯æœªåˆ é™¤ã€‚å³å°†è¿”å›ä¸»èœå•ã€‚\n");
+			system("pause");break;
+		}
+	}
+	return;
 }
 
-
+/* *********************************************************************
+|    å‡½æ•°åï¼šChangeColor
+|    å‡½æ•°åŠŸèƒ½ï¼šæ›´æ”¹çª—å£èƒŒæ™¯é¢œè‰²ä¸å­—ä½“é¢œè‰²
+\  ******************************************************************** */
+void ChangeColor()
+{
+	system("title è®¾å¤‡ç®¡ç†ç³»ç»Ÿ  -  é¢œè‰²ä¿®æ”¹");
+	char ColorChoice[3]="";
+	puts("è¯·è¾“å…¥æ‚¨è¦æ›´æ”¹çš„èƒŒæ™¯ä¸å­—ä½“é¢œè‰²ï¼Œå­—ç¬¦ä¸åŒºåˆ†å¤§å°å†™ï¼Œä»¥å›è½¦ç»“æŸï¼š\n");
+	puts("    0 = é»‘è‰²       8 = ç°è‰²");
+	puts("    1 = è“è‰²       9 = æ·¡è“è‰²");
+	puts("    2 = ç»¿è‰²       A = æ·¡ç»¿è‰²");
+	puts("    3 = æµ…ç»¿è‰²     B = æ·¡æµ…ç»¿è‰²");
+	puts("    4 = çº¢è‰²       C = æ·¡çº¢è‰²");
+	puts("    5 = ç´«è‰²       D = æ·¡ç´«è‰²");
+	puts("    6 = é»„è‰²       E = æ·¡é»„è‰²");
+	puts("    7 = ç™½è‰²       F = äº®ç™½è‰²\n");
+	puts("ç¤ºä¾‹: è¾“å…¥\"fc\"å°†è®¾ç½®èƒŒæ™¯ä¸ºäº®ç™½è‰²ï¼Œå­—ä½“ä¸ºæ·¡çº¢è‰²ã€‚");
+	puts("å¦‚éœ€æ¢å¤é»˜è®¤é¢œè‰²ï¼Œè¯·è¾“å…¥\"**\"ï¼›è¿”å›ä¸»èœå•ï¼Œè¯·è¾“å…¥\"##\"ã€‚");
+	printf(">>> ");
+	while(true)
+	{
+		ColorChoice[0]=getchar();
+		ColorChoice[1]=getchar();
+		fflush(stdin);
+		if(strcmp(ColorChoice,"**")==0)     // æ¢å¤é»˜è®¤é¢œè‰²
+		{
+			system("color 07");
+			break;
+		}
+		else if(strcmp(ColorChoice,"##")==0)    // è¿”å›ä¸»èœå•
+			break;
+		else if(!isxdigit(ColorChoice[0]) || !isxdigit(ColorChoice[1]))  // è¾“å…¥é”™è¯¯
+			printf("è¾“å…¥é”™è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼š");
+		else if(ColorChoice[0]==ColorChoice[1])  // èƒŒæ™¯ä¸å­—ä½“åŒè‰²
+			printf("ä¸èƒ½å°†èƒŒæ™¯ä¸å­—ä½“è®¾ç½®ä¸ºåŒä¸€é¢œè‰²ã€‚è¯·é‡æ–°è¾“å…¥ï¼š");
+		else
+		{
+			char ColorMode[10]="color ";
+			strcat(ColorMode,ColorChoice);
+			system(ColorMode);
+			printf("é¢œè‰²è®¾ç½®æˆåŠŸã€‚");
+			system("pause");
+			break;
+		}
+	}
+	return;
+}
 
 /* *********************************************************************
-|    º¯ÊıÃû£º111
-|    º¯Êı¹¦ÄÜ£º111
-|    ½Ó¿Ú²ÎÊı£º111
-|    ·µ»ØÖµ£º111
+|    å‡½æ•°åï¼šQuit
+|    å‡½æ•°åŠŸèƒ½ï¼šé€€å‡ºç³»ç»Ÿå‰æ£€æŸ¥ä¿¡æ¯æ˜¯å¦å·²ç»ä¿å­˜åˆ°æ–‡ä»¶ï¼Œå¦‚æœªä¿å­˜æé†’ç”¨æˆ·ä¿å­˜ã€‚
+|              é€€å‡ºå‰å°†é“¾è¡¨æ‰€å ç©ºé—´é‡Šæ”¾ã€‚
+|    è¿”å›å€¼ï¼štrue:åº”é€€å‡ºç³»ç»Ÿ   false:è¿”å›ä¸»èœå•
 \  ******************************************************************** */
+bool Quit()
+{
+	while(!isSaved && head->next!=NULL)   // æœªä¿å­˜ä¸”é“¾è¡¨éç©º
+	{
+		puts("\næ‚¨ä¹‹å‰ä½œå‡ºçš„æ›´æ”¹å°šæœªä¿å­˜åˆ°æ–‡ä»¶ï¼Œæ˜¯å¦ä¿å­˜ï¼Ÿ");
+		puts("\t1 - ä¿å­˜åˆ°æ–‡ä»¶    2 - ç›´æ¥é€€å‡ºç³»ç»Ÿ    0 - è¿”å›ä¸»èœå•");
+		printf(">>> ");
+		char choice=getchar();
+		fflush(stdin);
+		switch(choice)
+		{
+		case '1':putchar('\n');SaveData();break;
+		case '2':isSaved=true;break;   // ç›´æ¥é€€å‡ºç³»ç»Ÿï¼Œè§†ä¸ºæ•°æ®å·²ä¿å­˜
+		case '0':return false;
+		default:printf("è¾“å…¥é”™è¯¯ï¼Œå³å°†è¿”å›ä¸»èœå•ã€‚\n");
+			system("pause");fflush(stdin);return false;
+		}
+	}
+
+	// é‡Šæ”¾é“¾è¡¨æ‰€å ç©ºé—´
+	equip *p=head;
+	while(p->next!=NULL)
+	{
+		p=p->next;
+		delete p->pre;
+	}
+	delete p;
+	return true;
+}
+
