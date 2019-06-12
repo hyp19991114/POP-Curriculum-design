@@ -334,6 +334,12 @@ void CheckOnePiece()
 void KeywordSearch()
 {
 	system("title 设备管理系统 - 关键字查找");
+	if(head->next==NULL)   // 除头结点外，链表为空
+	{
+		puts("\n当前系统内暂无记录，无法查找。\n");
+		system("pause");
+		return;
+	}
 	puts("请输入想查找的内容，只能输入一个关键字，以回车结束。");
 	printf(">>> ");
 	char keyword[100],temp[500];
@@ -377,7 +383,7 @@ void SaveData()
 	{
 		puts("\n当前系统内暂无记录，请输入信息后再尝试保存。\n");
 		system("pause");
-		return;  // 无记录时并不保存任何数据，返回false
+		return;
 	}
 
 	puts("请输入文件名或文件的地址，以回车结束。注意：地址中的'\\'应写作\"\\\\\"。");
@@ -444,24 +450,23 @@ void Modify()
 			p->price,p->boughtDate.year,p->boughtDate.month,p->boughtDate.day,
 			p->person,p->status,p->postscript);
 
-		equip t;
-		puts("\n请输入修改后的内容：");
-		printf("设备编号	仪器名称	型号规格	单价	购入日期	领用人	使用状况	备注\n");
-		scanf("%d %s %s %lf %d-%d-%d %s %s %s",&t.id,t.name,t.type,
-			&t.price,&t.boughtDate.year,&t.boughtDate.month,&t.boughtDate.day,
-			t.person,t.status,t.postscript);
-		fflush(stdin);
-
-		printf("\n\t1 - 确认修改\t2 - 返回\n");
+		printf("\n\t1 - 修改信息\t2 - 返回主菜单\n");
 		printf(">>> ");
 		char choice=getchar();
 		fflush(stdin);
 		switch(choice)
 		{
-		case '1':*p=t;
+		case '1':{
+			puts("\n请输入修改后的内容：");
+			printf("设备编号	仪器名称	型号规格	单价	购入日期	领用人	使用状况	备注\n");
+			scanf("%d %s %s %lf %d-%d-%d %s %s %s",&p->id,p->name,p->type,
+				&p->price,&p->boughtDate.year,&p->boughtDate.month,&p->boughtDate.day,
+				p->person,p->status,p->postscript);
+			fflush(stdin);
 			printf("修改成功。");
 			isSaved=false;   // 更新数据保存状态（未保存）
 			system("pause");break;
+				 }
 		case '2':break;
 		default:printf("输入错误，信息未修改。即将返回主菜单。\n");
 			system("pause");break;
@@ -550,13 +555,15 @@ void ChangeColor()
 		if(strcmp(ColorChoice,"**")==0)     // 恢复默认颜色
 		{
 			system("color 07");
+			printf("已恢复默认颜色。");
+			system("pause");
 			break;
 		}
 		else if(strcmp(ColorChoice,"##")==0)    // 返回主菜单
 			break;
 		else if(!isxdigit(ColorChoice[0]) || !isxdigit(ColorChoice[1]))  // 输入错误
 			printf("输入错误，请重新输入：");
-		else if(ColorChoice[0]==ColorChoice[1])  // 背景与字体同色
+		else if(toupper(ColorChoice[0])==toupper(ColorChoice[1]))  // 背景与字体同色
 			printf("不能将背景与字体设置为同一颜色。请重新输入：");
 		else
 		{
