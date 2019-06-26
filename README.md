@@ -1,6 +1,6 @@
-# Procedure-Oriented-Curriculum-design
+# POP-Curriculum-design
 
-面向过程课程设计 - 设备管理系统
+面向过程程序设计课程设计 - 设备管理系统
 
 1 - 录入新信息
 
